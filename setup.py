@@ -12,7 +12,7 @@ setup(
     author='Mackenzie Marshall',
     author_email='mack.j.marshall@gmail.com',
     license='BSD License',
-    url='http://github.com/marshall91/pytappd/',
+    url='http://github.com/marshall91/pythonUntappd',
     long_description=long_description,
     platforms=["any"],
     classifiers=[
