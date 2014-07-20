@@ -1,5 +1,5 @@
 """
-pytappd.py - v0.1
+pythonUntappd.py - v0.1
 
 Python wrapper for the Untappd API - https://untappd.com/api/docs
 
