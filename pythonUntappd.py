@@ -256,13 +256,99 @@ class api:
 
         return self._do_get(method, auth, params)
 
+    """
+    Untappd API Search Calls
+    """
+    def brewery_search(self, query):
+        method = "search/brewery"
+        auth = self._get_api_auth_token()
+        params = {
+            "q": query
+        }
+
+        return self._do_get(method, auth, params)
+
     def beer_search(self, query, sort=None):
         method = "search/beer"
+        auth = self._get_api_auth_token()
         params = {
             "q": query
         }
         if sort:
             params['sort'] = sort
-        return self._do_get(method, params)
+        return self._do_get(method, auth, params)
 
+    def beer_trending(self):
+        method = "beer/trending"
+        auth = self._get_api_auth_token()
 
+        return self._do_get(method, auth, {})
+
+    """
+    Untappd API User Actions
+    """
+    def checkin(self, gmt_offset, timezone, beer_id, **kwargs):
+        method = "checkin/add"
+        auth = self._get_access_token()
+        params = {
+            "gmt_offset": gmt_offset,
+            "timezone": timezone,
+            "bid": beer_id
+        }
+        if "foursquare_id" in kwargs:
+            params['foursquare_id'] = kwargs['foursquare_id']
+        if "geolat" in kwargs:
+            params["geolat"] = kwargs["geolat"]
+        if "geolng" in kwargs:
+            params["geolng"] = kwargs["geolng"]
+        if "shout" in kwargs:
+            params["shout"] = kwargs["shout"]
+        if "rating" in kwargs:
+            params["rating"] = kwargs["rating"]
+        if "facebook" in kwargs:
+            params["facebook"] = kwargs["facebook"]
+        if "twitter" in kwargs:
+            params["twitter"] = kwargs["twitter"]
+        if "foursquare" in kwargs:
+            params["foursquare"] = kwargs["foursquare"]
+
+        return self._do_post(method, auth, params)
+
+    def add_comment(self, checkin_id, comment):
+        method = "checkin/addcomment/" + checkin_id
+        auth = self._get_access_token()
+        params = {
+            "comment": comment
+        }
+
+        return self._do_post(method, auth, params)
+
+    def remove_comment(self, comment_id):
+        method = "checkin/deletecomment/" + comment_id
+        auth = self._get_access_token()
+
+        return  self._do_post(method, auth, {})
+
+    def toast(self, checkin_id):
+        method = "checkin/toast/" + checkin_id
+        auth = self._get_access_token()
+
+        return self._do_post(method, auth, {})
+
+    def add_to_wishlist(self, beer_id):
+        method = "user/wishlist/add"
+        auth = self._get_access_token()
+        params = {
+            "bid": beer_id
+        }
+
+        return self._do_get(method, auth, params)
+
+    def remove_from_wishlist(self, beer_id):
+        method = "user/wishlist/delete"
+        auth = self._get_access_token()
+        params = {
+            "bid": beer_id
+        }
+
+        return self._do_get(method, auth, params)
