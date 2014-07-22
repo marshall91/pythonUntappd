@@ -21,7 +21,6 @@ class api:
         self.url = 'http://api.untappd.com/v4/'
         self.client_id = client_id
         self.client_secret = client_secret
-        self.client_auth_params = "client_id=" + self.client_id + "&client_secret=" + self.client_secret
         self.auth = None
         self.user_auth_params = None
 
@@ -33,9 +32,17 @@ class api:
             auth = Untappd API access token
         """
         self.auth = auth
-        self.user_auth_params = "access_token=" + self.auth
 
-    def _do_get(self, method, authorization, params):
+    def _get_api_auth_token(self):
+        """
+        Internal function to get the access token if set, of the client ID and secret
+        """
+        if self.auth:
+            return "access_token=" + self.auth
+        else:
+            return "client_id=" + self.client_id + "&client_secret=" + self.client_secret
+
+    def _do_get(self, method, params):
         """
         Internal Function to send GETd requests
 
@@ -44,7 +51,7 @@ class api:
             authorization = URL encoding of Untappd API authorization tokens
             params = Params for the API request
         """
-        url = self.url + method + "?" + authorization
+        url = self.url + method + "?" + self._get_api_auth_token()
 
         if params:
             params = urllib.urlencode(params)
@@ -55,7 +62,7 @@ class api:
 
         return json.loads(response)
 
-    def _do_post(self, method, authorization, params):
+    def _do_post(self, method, params):
         """
         Internal Function to send POST requests
 
@@ -64,40 +71,37 @@ class api:
             authorization = URL encoding of Untappd API authorization tokens
             params = Params for the API request
         """
-        url = self.url + method + "?" + authorization
+        url = self.url + method + "?" + self._get_api_auth_token()
         params = urllib.urlencode(params)
         response = urllib2.urlopen(url, params).read()
 
         return json.loads(response)
 
     """
-    Untappd API Feeds
+    Untappd API Feed Calls
     """
     def friend_feed(self, max_id=None, limit=None):
         method = 'checkin/recent'
-        authorization = self.user_auth_params
         params = {}
         if max_id:
             params['max_id'] = max_id
         if limit:
             params['limit'] = limit
 
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
     def user_feed(self, username, max_id=None, limit=None):
         method = 'user/checkin/' + username
-        authorization = self.client_auth_params
         params = {}
         if max_id:
             params['max_id'] = max_id
         if limit:
             params['limit'] = limit
 
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
     def pub_feed(self, **kwargs):
         method = 'thepub/local'
-        authorization = self.client_auth_params
         params = {}
         if 'min_id' in kwargs:
             params['min_id'] = kwargs['min_id']
@@ -112,11 +116,10 @@ class api:
         if 'limit' in kwargs:
             params['limit'] = kwargs['limit']
 
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
     def venue_feed(self, venue_id, min_id=None, max_id=None, limit=None):
         method = "venue/checkins/" + venue_id
-        authorization = self.client_auth_params
         params = {}
         if min_id:
             params['min_id'] = min_id
@@ -125,11 +128,10 @@ class api:
         if limit:
             params['limit'] = limit
 
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
     def beer_feed(self, beer_id, min_id=None, max_id=None, limit=None):
         method = "beer/checkins/" + beer_id
-        authorization = self.client_auth_params
         params = {}
         if min_id:
             params['min_id'] = min_id
@@ -138,11 +140,10 @@ class api:
         if limit:
             params['limit'] = limit
 
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
     def brewery_feed(self, brewery_id, min_id=None, max_id=None, limit=None):
         method = "brewery/checkins/" + brewery_id
-        authorization = self.client_auth_params
         params = {}
         if min_id:
             params['min_id'] = min_id
@@ -151,16 +152,15 @@ class api:
         if limit:
             params['limit'] = limit
 
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
     def beer_search(self, query, sort=None):
         method = "search/beer"
-        authorization = self.client_auth_params
         params = {
             "q": query
         }
         if sort:
             params['sort'] = sort
-        return self._do_get(method, authorization, params)
+        return self._do_get(method, params)
 
 
