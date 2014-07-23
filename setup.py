@@ -6,7 +6,7 @@ long_description = open('README.md').read()
 
 setup(
     name='pythonUntappd',
-    version="0.3",
+    version="0.4",
     py_modules = ['pythonUntappd'],
     description='A python library to wrap the Untappd.com API',
     author='Mackenzie Marshall',
