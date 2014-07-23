@@ -352,3 +352,51 @@ class api:
         }
 
         return self._do_get(method, auth, params)
+
+    """
+    Untappd API Friends Calls
+    """
+    def pending_friends(self):
+        method = "user/pending"
+        auth = self._get_access_token()
+
+        return self._do_get(method, auth, {})
+
+    def accept_friend(self, target_user):
+        method = "friend/accept/" + target_user
+        auth = self._get_access_token()
+
+        return self._do_post(method, auth, {})
+
+    def reject_friend(self, target_user):
+        method = "friend/reject/" + target_user
+        auth = self._get_access_token()
+
+        return self._do_post(method, auth, {})
+
+    def remove_friend(self, target_user):
+        method = "friend/remove/" + target_user
+        auth = self._get_access_token()
+
+        return self._do_post(method, auth, {})
+
+    def request_friend(self, target_user):
+        method = "friend/request/" + target_user
+        auth = self._get_access_token()
+
+        return self._do_post(method, auth, {})
+
+    """
+    Untappd API Misc Calls
+    """
+    def notifications(self):
+        method = "notifications"
+        auth = self._get_access_token()
+
+        return self._do_get(method, auth, {})
+
+    def foursquare_venue_lookup(self, venue_id):
+        method = "venue/foursquare_lookup/" + venue_id
+        auth = self._get_api_auth_token()
+
+        return self._do_get(method, auth, {})
