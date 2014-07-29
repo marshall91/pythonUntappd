@@ -2,11 +2,11 @@
 
 from distutils.core import setup
 
-long_description = open('README.md').read()
+long_description = open('README').read()
 
 setup(
     name='pythonUntappd',
-    version="0.4",
+    version="0.5",
     py_modules = ['pythonUntappd'],
     description='A python library to wrap the Untappd.com API',
     author='Mackenzie Marshall',
